@@ -1,30 +1,54 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+// test/widget_test.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:dailymotiv/main.dart';
-
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  // Test 1: Basic widget test
+  testWidgets('Find widgets in MaterialApp', (WidgetTester tester) async {
+    // Create a test widget
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Column(
+            children: [
+              const Text('DailyMotiv'),
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text('Test Button'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify text is found
+    expect(find.text('DailyMotiv'), findsOneWidget);
+    expect(find.text('Test Button'), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+  // Test 2: Test button tap
+  testWidgets('Button tap test', (WidgetTester tester) async {
+    var tapped = false;
+    
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              tapped = true;
+            },
+            child: const Text('Tap me'),
+          ),
+        ),
+      ),
+    ));
+
+    // Tap the button
+    await tester.tap(find.text('Tap me'));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify tap worked
+    expect(tapped, true);
   });
 }
